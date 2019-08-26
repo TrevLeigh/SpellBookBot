@@ -1,6 +1,14 @@
 let Discord = require('discord.io');
 let logger = require('winston');
 let auth = require('./auth.json');
+const request = require('request');
+
+const API_URL = 'http://dnd5eapi.co/api/spells';
+
+// api logic to get spells
+let spells = [];
+
+
 // Configure logger settings
 logger.remove(logger.transports.Console);
 logger.add(new logger.transports.Console, {
@@ -25,15 +33,24 @@ bot.on('message', function (user, userID, channelID, message, evt) {
         let cmd = args[0];
        
         args = args.splice(1);
-        switch(cmd) {
-            // !ping
-            case 'ping':
-                bot.sendMessage({
-                    to: channelID,
-                    message: 'Pong!'
-                });
-            break;
-            // Just add any case commands if you want to..
-         }
+        request(API_URL,{ json: true }, (err, resp, body) => {
+            body.results.forEach(element => {
+                spells.push(element);
+            });
+            
+            switch(cmd) {
+                
+                // !ping
+                case 'ping':
+                    spells.forEach(e => {
+                        bot.sendMessage({
+                            to: channelID,
+                            message: e.name
+                        });
+                    });
+                break;
+                // Just add any case commands if you want to..
+             }
+        });
      }
 });
