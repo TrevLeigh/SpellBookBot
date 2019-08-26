@@ -1,0 +1,11 @@
+{
+    "name": "dnd-spell-book",
+    "version": "1.0.0",
+    "description": "Dnd 5e spellbook bot",
+    "main": "bot.js",
+    "author": "Trev Leigh",
+    "dependencies": {
+        "discord.io": "https://github.com/woor/discord.io/tarball/gateway_v6",
+        "winston": "^3.2.1"
+    }
+}
