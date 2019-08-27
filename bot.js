@@ -35,7 +35,8 @@ bot.on('message', function (user, userID, channelID, message, evt) {
             3. Find way to make sure apostrophe show up.
         */
         request(API_URL,{ json: true }, (err, resp, body) => {
-            let typedSpell = body.results.filter(spell => spell.name === cmd.replace('-',' '))[0];
+            let typedSpell = body.results.filter(spell => spell.name === cmd.replace(/-/g,' '))[0];
+            console.log(cmd.replace('-',' '));
             request(typedSpell.url, {json: true}, (err,resp,body) => {
                 bot.sendMessage({
                     to: channelID,
