@@ -38,12 +38,13 @@ bot.on('message', function (user, userID, channelID, message, evt) {
             let typedSpell = body.results.filter(spell => spell.name === cmd.replace(/-/g,' '))[0];
             if(typedSpell) {
                 request(typedSpell.url, {json: true}, (err,resp,body) => {
+                    console.log(body.desc.toString().length);
                     bot.sendMessage({
                         to: channelID,
                         embed: {
                             color: 3447003,
                             title: body.name,
-                            description: body.desc.toString().replace(/â€™/g,"'"),
+                            description: body.desc.toString().length < 2000 ? body.desc.toString().replace(/â€™/g,"'") : body.desc[0].replace(/â€™/g,"'"),
                             fields: [{
                                 name: "Higher Level",
                                 value: body.higher_level? body.higher_level[0].replace(/â€™/g,"'") : 'N/A'
