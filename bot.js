@@ -66,7 +66,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
                             },
                             {
                                 name: "Material",
-                                value: body.material
+                                value: body.material? body.material: 'No materials required'
                             },
                             {
                                 name: "Components",
