@@ -31,21 +31,63 @@ bot.on('message', function (user, userID, channelID, message, evt) {
         // Api requests to take the user input and search for the spell
         /*
             TODO: 1. Add a way so users do not need to use Pascal Case.
-            2. Add more information about spells in embed.
-            3. Find way to make sure apostrophe show up.
+            2. Add classes and subclasses to description.
+            3. Error handling
         */
         request(API_URL,{ json: true }, (err, resp, body) => {
             let typedSpell = body.results.filter(spell => spell.name === cmd.replace(/-/g,' '))[0];
-            console.log(cmd.replace('-',' '));
-            request(typedSpell.url, {json: true}, (err,resp,body) => {
+            if(typedSpell.url) {
+                request(typedSpell.url, {json: true}, (err,resp,body) => {
+                    bot.sendMessage({
+                        to: channelID,
+                        embed: {
+                            color: 3447003,
+                            title: body.name,
+                            description: body.desc.toString().replace(/â€™/g,"'"),
+                            fields: [{
+                                name: "Higher Level",
+                                value: body.higher_level? body.higher_level[0].replace(/â€™/g,"'") : 'cannot be cast at a higher level'
+                            },
+                            {
+                                name: "Casting Time",
+                                value: body.casting_time
+                            },
+                            {
+                                name: "Spell Level",
+                                value: body.level
+                            },
+                            {
+                                name: "Range/Duration",
+                                value: body.range + '/ ' + body.duration
+                            },
+                            {
+                                name: "Concentration/Ritual",
+                                value: body.concentration + '/ ' + body.ritual
+                            },
+                            {
+                                name: "Material",
+                                value: body.material
+                            },
+                            {
+                                name: "Components",
+                                value: body.components.toString()
+                            },
+                            {
+                                name: "School",
+                                value: body.school.name
+                            }],
+                            footer: {
+                                text: "Found in: " + body.page
+                            }
+                        }
+                    });
+                });
+            } else {
                 bot.sendMessage({
                     to: channelID,
-                    embed: {
-                        title: body.name,
-                        description: body.desc[0]
-                    }
+                    message: 'Sorry could not find spell you are looking for. Please make sure you are using Pascal Case.'
                 });
-            });
+            }
             
         });
     }
