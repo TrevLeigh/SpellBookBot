@@ -46,7 +46,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
                             description: body.desc.toString().replace(/â€™/g,"'"),
                             fields: [{
                                 name: "Higher Level",
-                                value: body.higher_level? body.higher_level[0].replace(/â€™/g,"'") : 'cannot be cast at a higher level'
+                                value: body.higher_level? body.higher_level[0].replace(/â€™/g,"'") : ' '
                             },
                             {
                                 name: "Casting Time",
