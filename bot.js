@@ -36,7 +36,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
         */
         request(API_URL,{ json: true }, (err, resp, body) => {
             let typedSpell = body.results.filter(spell => spell.name === cmd.replace(/-/g,' '))[0];
-            if(typedSpell.url) {
+            if(typedSpell) {
                 request(typedSpell.url, {json: true}, (err,resp,body) => {
                     bot.sendMessage({
                         to: channelID,
